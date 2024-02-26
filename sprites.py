@@ -48,12 +48,32 @@ class Player(pg.sprite.Sprite):
     #             return True
     #     return False
 
+    # def collide_with_walls(self, dir):
+    #     if dir == 'x':
+    #         hits = pg.sprite.spritecollide(self, self.game.walls, False)
+    #         if hits:
+    #             if self.vx > 0:
+    #                 self.x = hits[0].rect.left - self.width
+    #             if self.vx < 0:
+    #                 self.x = hits[0].rect.right
+    #             self.vx = 0
+    #             self.rect.x = self.x
+    #     if dir == 'y':
+    #         hits = pg.sprite.spritecollide(self, self.game.walls, False)
+    #         if hits:
+    #             if self.vy > 0:
+    #                 self.y = hits[0].rect.bottom - self.height
+    #             if self.vy < 0:
+    #                 self.y = hits[0].rect.top
+    #             self.vy = 0
+    #             self.rect.y = self.y
+
     def collide_with_walls(self, dir):
         if dir == 'x':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
                 if self.vx > 0:
-                    self.x = hits[0].rect.left - self.width
+                    self.x = hits[0].rect.left - self.rect.width
                 if self.vx < 0:
                     self.x = hits[0].rect.right
                 self.vx = 0
@@ -62,32 +82,72 @@ class Player(pg.sprite.Sprite):
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
                 if self.vy > 0:
+                    self.y = hits[0].rect.top - self.rect.height
+                if self.vy < 0:
+                    self.y = hits[0].rect.bottom
+                self.vy = 0
+                self.rect.y = self.y
+
+    def collide_with_coins(self, dir):
+        if dir == 'x':
+            hits = pg.sprite.spritecollide(self, self.game.coins, False)
+            if hits:
+                if self.vx > 0:
+                    self.x = hits[0].rect.left - self.width
+                if self.vx < 0:
+                    self.x = hits[0].rect.right
+                self.vx = 0
+                self.rect.x = self.x
+        if dir == 'y':
+            hits = pg.sprite.spritecollide(self, self.game.coins, False)
+            if hits:
+                if self.vy > 0:
                     self.y = hits[0].rect.bottom - self.height
                 if self.vy < 0:
                     self.y = hits[0].rect.top
                 self.vy = 0
                 self.rect.y = self.y
+                
+
     def collide_with_group(self, group, kill):
         hits = pg.sprite.spritecollide(self, group, kill)
         if hits:
-            return True
+            if str(hits[0].__class__.__name__) == "Coin":
+                self.moneybag += 1
 
 
+
+
+# Now we fixed collision problem by finding that it wasn't colliding with the walls vertically. Below is the old version and below this commented bit is the new 
+                # version copied from Github
+    # def update(self):
+    #     self.get_keys()
+    #     self.x += self.vx *self.game.dt
+    #     self.y += self.vy *self.game.dt
+    #     self.rect.x = self.x
+    #     # add collision later
+    #     self.collide_with_walls('x')
+    #     self.rect.y = self.y 
+    #     self.collide_with_group(self.game.coins, True)
+    #     # add collision later
+    #     # if self.collide_with_coins():
+    #     #     self.moneybag += 1
+    #     # coin_hits = pg.sprite.spritecollide(self, self.game.coins, True)
+    #     # if coin_hits:
+    #     #     self.moneybag += 1
 
     def update(self):
         self.get_keys()
-        self.x += self.vx *self.game.dt
-        self.y += self.vy *self.game.dt
+        self.x += self.vx * self.game.dt
+        self.y += self.vy * self.game.dt
         self.rect.x = self.x
         # add collision later
         self.collide_with_walls('x')
-        self.rect.y = self.y 
+        self.rect.y = self.y
         # add collision later
-        if self.collide_with_coins():
-            self.moneybag += 1
-        coin_hits = pg.sprite.spritecollide(self, self.game.coins, True)
-        if coin_hits:
-            self.moneybag += 1
+        self.collide_with_walls('y')
+        self.collide_with_group(self.game.coins, True)
+        self.collide_with_group(self.game.power_ups, True)
        
 
 # we created a class for wall and used the similar function for the class player
@@ -116,6 +176,21 @@ class Coin(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
+class PowerUp(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.power_ups
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(YELLOW)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
+
 
 
 

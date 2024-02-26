@@ -12,6 +12,7 @@ RED = (255,0,0)
 LIGHTGREY = (75,75,75)
 BLUE = (0,0,255)
 BGCOLOR = (0,0,0)
+YELLOW = (255,255,0)
 
 # Player settings
 PLAYER_SPEED = 300

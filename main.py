@@ -31,6 +31,7 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.coins = pg.sprite.Group()
+        self.power_ups = pg.sprite.Group()
         for row, tiles in enumerate(self.map_data):
             print(row)
             for col, tile in enumerate(tiles):
@@ -41,6 +42,9 @@ class Game:
                 if tile == '2':
                     print("a coin at", row, col)
                     Coin(self, col, row)
+                if tile == '3':
+                    print("a powerup at", row, col)
+                    PowerUp(self, col, row)
               
 
         self.player1 = Player(self, 1, 1)
