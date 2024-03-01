@@ -15,4 +15,4 @@ BGCOLOR = (0,0,0)
 YELLOW = (255,255,0)
 
 # Player settings
-PLAYER_SPEED = 300
+PLAYER_SPEED = 600

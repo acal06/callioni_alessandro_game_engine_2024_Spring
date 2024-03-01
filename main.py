@@ -1,6 +1,15 @@
 # This file was created by: Alessandro Callioni
 # added this commnet to prove github is listening...
 # imports the pygme as pg and imports settings code
+'''
+more maps/levels
+moving enemies
+usable powerups
+coin counter
+player death
+
+'''
+
 import pygame as pg
 from settings import *
 from sprites import *
