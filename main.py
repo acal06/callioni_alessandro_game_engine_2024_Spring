@@ -2,11 +2,10 @@
 # added this commnet to prove github is listening...
 # imports the pygme as pg and imports settings code
 '''
-more maps/levels
 moving enemies
-usable powerups
 coin counter
 player death
+health bar
 
 '''
 
@@ -41,6 +40,7 @@ class Game:
         self.walls = pg.sprite.Group()
         self.coins = pg.sprite.Group()
         self.power_ups = pg.sprite.Group()
+        self.mobs = pg.sprite.Group()
         for row, tiles in enumerate(self.map_data):
             print(row)
             for col, tile in enumerate(tiles):
@@ -54,6 +54,9 @@ class Game:
                 if tile == '3':
                     print("a powerup at", row, col)
                     PowerUp(self, col, row)
+                if tile == 'M':
+                    print("a mob at", row, col)
+                    Mob(self, col, row)
               
 
         self.player1 = Player(self, 1, 1)
