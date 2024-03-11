@@ -3,6 +3,8 @@
 import pygame as pg
 from settings import *
 
+vec =pg.math.Vector2
+
 # create a class for player
 class Player(pg.sprite.Sprite):
     # define __init__(self)
@@ -19,7 +21,7 @@ class Player(pg.sprite.Sprite):
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.moneybag = 0
-        self.speed = 300
+        self.speed = 450
     
 
     def get_keys(self):
@@ -214,6 +216,8 @@ class Mob(pg.sprite.Sprite):
         self.vx, self.vy = 100, 100
         self.x = x * TILESIZE
         self.y = y * TILESIZE
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
         self.speed = 1
     def collide_with_walls(self, dir):
         if dir == 'x':
@@ -228,9 +232,49 @@ class Mob(pg.sprite.Sprite):
             if hits:
                 self.vy *= -1
                 self.rect.y = self.y
-    # def update(self):
-    #     # self.rect.x += 1
-    #     self.x += self.vx * self.game.dt
-    #     self.y += self.vy * self.game.dt
-
+    def update(self):
+        # self.rect.x += 1
+        self.x += self.vx * self.game.dt
+        self.y += self.vy * self.game.dt
         
+        if self.rect.x < self.game.player1.rect.x:
+            self.vx = 100
+        if self.rect.x > self.game.player1.rect.x:
+            self.vx = -100    
+        if self.rect.y < self.game.player1.rect.y:
+            self.vy = 100
+        if self.rect.y > self.game.player1.rect.y:
+            self.vy = -100
+        self.rect.x = self.x
+        self.collide_with_walls('x')
+        self.rect.y = self.y
+        self.collide_with_walls('y')
+
+
+# class Mob2(pg.sprite.Sprite):
+#     def __init__(self, game, x, y):
+#         self.groups = game.all_sprites, game.mobs
+#         pg.sprite.Sprite.__init__(self, self.groups)
+#         self.game = game
+#         self.rect = self.image.get_rect()
+#         self.pos = vec(x, y) * TILESIZE
+#         self.vel = vec(0, 0)
+#         self.acc = vec(0, 0)
+#         self.rect.center = self.pos
+#         self.rot = 0
+#         # added
+#         self.speed = 150
+#     def update(self):
+#         self.rot = (self.game.player.rect.center - self.pos).angle_to(vec(1, 0))
+#         self.rect.center = self.pos
+#         self.acc = vec(self.speed, 0).rotate(-self.rot)
+#         self.acc += self.vel * -1
+#         self.vel += self.acc * self.game.dt
+#         self.pos += self.vel * self.game.dt + 0.5 * self.acc * self.game.dt ** 2
+#         # self.hit_rect.centerx = self.pos.x
+#         collide_with_walls(self, self.game.walls, 'x')
+#         # self.hit_rect.centery = self.pos.y
+#         collide_with_walls(self, self.game.walls, 'y')
+#         # self.rect.center = self.hit_rect.center
+#         # if self.health <= 0:
+#         #     self.kill()
