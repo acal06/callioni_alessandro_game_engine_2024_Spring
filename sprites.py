@@ -310,15 +310,15 @@ class Mob2(pg.sprite.Sprite):
             self.chasing = False
     def collide_with_walls(self, dir):
         if dir == 'x':
-            hits = pg.sprite.spritecollide(self, self.game.walls, False)
+            hits = pg.sprite.spritecollide(self, self.game.walls, True)
             # if hits:
             #     self.vx *= -1
-            #     self.rect.x = self.x
+            #     self.rect.x = self.pos.x
         if dir == 'y':
-            hits = pg.sprite.spritecollide(self, self.game.walls, False)
+            hits = pg.sprite.spritecollide(self, self.game.walls, True)
             # if hits:
             #     self.vy *= -1
-            #     self.rect.y = self.y
+            #     self.rect.y = self.pos.y
     def update(self):
         self.sensor()
         if self.chasing:
