@@ -123,7 +123,7 @@ class Player(pg.sprite.Sprite):
             if str(hits[0].__class__.__name__) == "Mob":
                 print(hits[0].__class__.__name__)
                 print("collided with mob")
-                quit(self)
+                # quit(self)
                     
 
                           
@@ -162,6 +162,9 @@ class Player(pg.sprite.Sprite):
         self.collide_with_group(self.game.coins, True)
         self.collide_with_group(self.game.power_ups, True)
         self.collide_with_group(self.game.mobs, False)
+        if self.collide_with_group(self.game.mobs, False):
+            self.hitpoints =-1
+            
        
 
 # we created a class for wall and used the similar function for the class player

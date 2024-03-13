@@ -87,7 +87,16 @@ class Game:
         for y in range(0, HEIGHT, TILESIZE):
             pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
 
-# 
+    def draw_heath_bar(surf, x, y, pct):
+        if pct <0:
+            pct = 0
+        BAR_LENGTH = 100
+        BAR_HEIGHT = 10
+        fill = (pct / 100) * BAR_LENGTH
+        outline_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
+        fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
+        pg.draw.rect(surf, GREEN, fill_rect)
+        pg.draw.rect(surf, WHITE, outline_rect, 2)
     
     def draw_text(self, surface, text, size, color, x, y):
         font_name = pg.font.match_font('comicsans')
@@ -103,6 +112,7 @@ class Game:
         self.draw_grid()
         self.all_sprites.draw(self.screen)
         self.draw_text(self.screen, str(self.player1.moneybag), 64, WHITE, 1, 1)
+        draw_heath_bar(self.screen, self.player1.rect.x, self.player1.rect.y, self.player1.hitpoints)
         pg.display.flip()
 
     def events(self):
@@ -139,6 +149,17 @@ class Game:
                     self.quit()
                 if event.type == pg.KEYUP:
                     waiting = False
+
+def draw_heath_bar(surf, x, y, pct):
+    if pct <0:
+        pct = 0
+    BAR_LENGTH = 100
+    BAR_HEIGHT = 10
+    fill = (pct / 100) * BAR_LENGTH
+    outline_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
+    fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
+    pg.draw.rect(surf, GREEN, fill_rect)
+    pg.draw.rect(surf, WHITE, outline_rect, 2)
 
 
 # Instantiate the game...
