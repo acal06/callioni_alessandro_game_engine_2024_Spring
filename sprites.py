@@ -123,7 +123,10 @@ class Player(pg.sprite.Sprite):
             if str(hits[0].__class__.__name__) == "Mob":
                 print(hits[0].__class__.__name__)
                 print("collided with mob")
-            
+                quit(self)
+                    
+
+                          
 
 
 
@@ -278,3 +281,55 @@ class Mob(pg.sprite.Sprite):
 #         # self.rect.center = self.hit_rect.center
 #         # if self.health <= 0:
 #         #     self.kill()
+
+
+class Mob2(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.mobs
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(ORANGE)
+        self.rect = self.image.get_rect()
+        # self.hit_rect = MOB_HIT_RECT.copy()
+        # self.hit_rect.center = self.rect.center
+        self.pos = vec(x, y) * TILESIZE
+        self.vel = vec(0, 0)
+        self.acc = vec(0, 0)
+        self.rect.center = self.pos
+        self.rot = 0
+        self.chase_distance = 500
+        # added
+        self.speed = 150
+        self.chasing = False
+        # self.health = MOB_HEALTH
+    def sensor(self):
+        if abs(self.rect.x - self.game.player1.rect.x) < self.chase_distance and abs(self.rect.y - self.game.player1.rect.y) < self.chase_distance:
+            self.chasing = True
+        else:
+            self.chasing = False
+    def collide_with_walls(self, dir):
+        if dir == 'x':
+            hits = pg.sprite.spritecollide(self, self.game.walls, False)
+            # if hits:
+            #     self.vx *= -1
+            #     self.rect.x = self.x
+        if dir == 'y':
+            hits = pg.sprite.spritecollide(self, self.game.walls, False)
+            # if hits:
+            #     self.vy *= -1
+            #     self.rect.y = self.y
+    def update(self):
+        self.sensor()
+        if self.chasing:
+            self.rot = (self.game.player1.rect.center - self.pos).angle_to(vec(1, 0))
+            # self.image = pg.transform.rotate(self.image, 45)
+            # self.rect = self.image.get_rect()
+            self.rect.center = self.pos
+            self.acc = vec(self.speed, 0).rotate(-self.rot)
+            self.acc += self.vel * -1
+            self.vel += self.acc * self.game.dt
+            self.pos += self.vel * self.game.dt + 0.5 * self.acc * self.game.dt ** 2
+            self.collide_with_walls('x')
+            self.collide_with_walls('y')
+            # self.hit_rect.centerx = self.pos.x

@@ -57,8 +57,8 @@ class Game:
                 if tile == 'M':
                     print("a mob at", row, col)
                     Mob(self, col, row)
-                # if tile == 'M':
-                #     Mob2(self, col, row)
+                if tile == 'M':
+                    Mob2(self, col, row)
               
 
         self.player1 = Player(self, 1, 1)
