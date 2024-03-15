@@ -21,7 +21,7 @@ class Player(pg.sprite.Sprite):
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.moneybag = 0
-        self.speed = 450
+        self.speed = 300
         self.hitpoints = 100
     
 
@@ -29,13 +29,13 @@ class Player(pg.sprite.Sprite):
         self.vx, self.vy = 0, 0
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
-            self.vx = -PLAYER_SPEED
+            self.vx = -self.speed
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
-            self.vx = PLAYER_SPEED
+            self.vx = self.speed
         if keys[pg.K_UP] or keys[pg.K_s]:
-            self.vy = PLAYER_SPEED
+            self.vy = self.speed
         if keys[pg.K_DOWN] or keys[pg.K_w]:
-            self.vy = -PLAYER_SPEED
+            self.vy = -self.speed
         if self.vx !=0 and self.vy !=0:
             self.vx *= 0.7071
             self.vy *= 0.7071
@@ -90,7 +90,10 @@ class Player(pg.sprite.Sprite):
                 self.moneybag += 1
             if str(hits[0].__class__.__name__) == "PowerUp":
                 print(hits[0].__class__.__name__)
-                self.speed += 300
+                self.speed += 50
+            if str(hits[0].__class__.__name__) == "HealthPotion":
+                print(hits[0].__class__.__name__)
+                self.hitpoints += 50
             if str(hits[0].__class__.__name__) == "Mob":
                 print(hits[0].__class__.__name__)
                 print("collided with mob")
@@ -135,9 +138,14 @@ class Player(pg.sprite.Sprite):
         self.collide_with_walls('y')
         self.collide_with_group(self.game.coins, True)
         self.collide_with_group(self.game.power_ups, True)
+        if self.collide_with_group(self.game.power_ups, True):
+            self.speed += 100
         self.collide_with_group(self.game.mobs, False)
         if self.collide_with_group(self.game.mobs, False):
             self.hitpoints =-1
+        self.collide_with_group(self.game.healthpotion, True)
+        if self.collide_with_group(self.game.healthpotion, True):
+            self.hitpoints += 50
         
             
        
@@ -182,6 +190,19 @@ class PowerUp(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
 
+class HealthPotion(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.healthpotion
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(WHITE)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
 
 
 class Mob(pg.sprite.Sprite):
@@ -199,7 +220,7 @@ class Mob(pg.sprite.Sprite):
         self.y = y * TILESIZE
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-        self.speed = 1
+        self.speed = 100
     def collide_with_walls(self, dir):
         if dir == 'x':
             # print('colliding on the x')
@@ -240,18 +261,14 @@ class Mob2(pg.sprite.Sprite):
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(ORANGE)
         self.rect = self.image.get_rect()
-        # self.hit_rect = MOB_HIT_RECT.copy()
-        # self.hit_rect.center = self.rect.center
         self.pos = vec(x, y) * TILESIZE
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
         self.rect.center = self.pos
         self.rot = 0
         self.chase_distance = 1000
-        # added
-        self.speed = 300
+        self.speed = 450
         self.chasing = False
-        # self.health = MOB_HEALTH
     def sensor(self):
         if abs(self.rect.x - self.game.player1.rect.x) < self.chase_distance and abs(self.rect.y - self.game.player1.rect.y) < self.chase_distance:
             self.chasing = True

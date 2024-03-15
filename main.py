@@ -41,6 +41,7 @@ class Game:
         self.coins = pg.sprite.Group()
         self.power_ups = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
+        self.healthpotion = pg.sprite.Group()
         for row, tiles in enumerate(self.map_data):
             print(row)
             for col, tile in enumerate(tiles):
@@ -59,6 +60,8 @@ class Game:
                     Mob(self, col, row)
                 if tile == 'M':
                     Mob2(self, col, row)
+                if tile == 'H':
+                    HealthPotion(self, col, row)
               
 
         self.player1 = Player(self, 1, 1)
