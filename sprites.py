@@ -93,12 +93,11 @@ class Player(pg.sprite.Sprite):
                 self.speed += 50
             if str(hits[0].__class__.__name__) == "HealthPotion":
                 print(hits[0].__class__.__name__)
-                self.hitpoints += 50
+                self.hitpoints += 25
             if str(hits[0].__class__.__name__) == "Mob":
                 print(hits[0].__class__.__name__)
                 print("collided with mob")
                 self.hitpoints -= 1
-                # quit(self)
             if self.hitpoints == 0:
                 quit(self)
                     
@@ -169,7 +168,7 @@ class Coin(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.coins
         pg.sprite.Sprite.__init__(self, self.groups)
         self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(LIGHTGREY)
+        self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
         self.game = game
         self.x = x
@@ -183,7 +182,7 @@ class PowerUp(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(YELLOW)
+        self.image.fill(LIGHTGREY)
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
