@@ -116,6 +116,7 @@ class Game:
         self.draw_grid()
         self.all_sprites.draw(self.screen)
         self.draw_text(self.screen, str(self.player1.moneybag), 64, WHITE, 1, 1)
+        # draw the healthbar above the player and connect it to player hitpoints
         draw_health_bar(self.screen, self.player1.rect.x, self.player1.rect.y, self.player1.hitpoints)
         pg.display.flip()
 
@@ -159,6 +160,7 @@ def draw_health_bar(surf, x, y, pct):
         pct = 0
     BAR_LENGTH = 100
     BAR_HEIGHT = 10
+    # we use this to fill the area defined by the health bar
     fill = (pct / 100) * BAR_LENGTH
     outline_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
     fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)

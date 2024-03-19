@@ -275,6 +275,7 @@ class Mob2(pg.sprite.Sprite):
             self.chasing = False
     def collide_with_walls(self, dir):
         if dir == 'x':
+        # Since we have the (self, self.game.walls, TRUE) set to TRUE, that means when it collides with the wall the wall will disappear
             hits = pg.sprite.spritecollide(self, self.game.walls, True)
         if dir == 'y':
             hits = pg.sprite.spritecollide(self, self.game.walls, True)
@@ -282,8 +283,6 @@ class Mob2(pg.sprite.Sprite):
         self.sensor()
         if self.chasing:
             self.rot = (self.game.player1.rect.center - self.pos).angle_to(vec(1, 0))
-            # self.image = pg.transform.rotate(self.image, 45)
-            # self.rect = self.image.get_rect()
             self.rect.center = self.pos
             self.acc = vec(self.speed, 0).rotate(-self.rot)
             self.acc += self.vel * -1
