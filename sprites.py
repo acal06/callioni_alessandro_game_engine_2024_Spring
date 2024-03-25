@@ -39,6 +39,8 @@ class Player(pg.sprite.Sprite):
         if self.vx !=0 and self.vy !=0:
             self.vx *= 0.7071
             self.vy *= 0.7071
+        if keys[pg.K_t]:
+            self.game.change_level("level3.txt")
         
 
 
@@ -189,6 +191,7 @@ class PowerUp(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
 
+# creating the class for the healthpotion
 class HealthPotion(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.healthpotion
@@ -203,7 +206,7 @@ class HealthPotion(pg.sprite.Sprite):
         self.rect.y = y * TILESIZE
 
 
-
+# has basic mob movement that we originally coded 
 class Mob(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.mobs
@@ -263,6 +266,7 @@ class Mob2(pg.sprite.Sprite):
         self.pos = vec(x, y) * TILESIZE
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
+        # we use vectors and acceleration for more fluid player tracking
         self.rect.center = self.pos
         self.rot = 0
         self.chase_distance = 1000

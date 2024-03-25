@@ -32,7 +32,7 @@ class Game:
     def load_data(self):
         game_folder = path.dirname(__file__)
         self.map_data = []
-        with open(path.join(game_folder, 'map.txt'), 'rt') as f:
+        with open(path.join(game_folder, 'level1.txt'), 'rt') as f:
             for line in f:
                 print(line)
                 self.map_data.append(line)
@@ -63,7 +63,44 @@ class Game:
                     Mob2(self, col, row)
                 if tile == 'H':
                     HealthPotion(self, col, row)
-              
+
+    def test_method(self):
+        print("I can be called from Sprites...")
+    # added level change method
+    def change_level(self, lvl):
+        # kill all existing sprites first to save memory
+        for s in self.all_sprites:
+            s.kill()
+        # reset criteria for changing level
+        self.player1.moneybag = 0
+        # reset map data list to empty
+        self.map_data = []
+        # open next level
+        with open(path.join(self.game_folder, lvl), 'rt') as f:
+            for line in f:
+                print(line)
+                self.map_data.append(line)
+        # repopulate the level with stuff
+        for row, tiles in enumerate(self.map_data):
+            print(row)
+            for col, tile in enumerate(tiles):
+                print(col)
+                if tile == '1':
+                    print("a wall at", row, col)
+                    Wall(self, col, row)
+                if tile == '2':
+                    print("a coin at", row, col)
+                    Coin(self, col, row)
+                if tile == '3':
+                    print("a powerup at", row, col)
+                    PowerUp(self, col, row)
+                if tile == 'M':
+                    print("a mob at", row, col)
+                    Mob(self, col, row)
+                if tile == 'M':
+                    Mob2(self, col, row)
+                if tile == 'H':
+                    HealthPotion(self, col, row)
 
         self.player1 = Player(self, 1, 1)
         self.all_sprites.add(self.player1)
@@ -91,6 +128,7 @@ class Game:
         for y in range(0, HEIGHT, TILESIZE):
             pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
 
+# defining draw_health_bar
     def draw_health_bar(surf, x, y, pct):
         if pct <0:
             pct = 0
@@ -137,7 +175,7 @@ class Game:
             
             
 
-
+# defininig the start screen
     def show_start_screen(self):
         self.screen.fill(BGCOLOR)
         self.draw_text(self.screen, "This is the start screen", 24, WHITE, WIDTH/2 - 32, 2)
@@ -154,6 +192,7 @@ class Game:
                     self.quit()
                 if event.type == pg.KEYUP:
                     waiting = False
+                    # when the key is released after being pressed the game no longer waits and the title screen goes away
 
 def draw_health_bar(surf, x, y, pct):
     if pct <0:
