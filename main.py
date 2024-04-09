@@ -178,7 +178,7 @@ class Game:
 # defininig the start screen
     def show_start_screen(self):
         self.screen.fill(BGCOLOR)
-        self.draw_text(self.screen, "This is the start screen", 24, WHITE, WIDTH/2 - 32, 2)
+        self.draw_text(self.screen, "This is the start screen", 24, WHITE, 11, 10)
         pg.display.flip()
         self.wait_for_key()
 

@@ -240,7 +240,7 @@ class Mob(pg.sprite.Sprite):
         # self.rect.x += 1
         self.x += self.vx * self.game.dt
         self.y += self.vy * self.game.dt
-        
+
         if self.rect.x < self.game.player1.rect.x:
             self.vx = 100
         if self.rect.x > self.game.player1.rect.x:
