@@ -63,6 +63,8 @@ class Game:
                     Mob2(self, col, row)
                 if tile == 'H':
                     HealthPotion(self, col, row)
+                if tile == 'P':
+                    Player(self, col, row)
 
     def test_method(self):
         print("I can be called from Sprites...")
