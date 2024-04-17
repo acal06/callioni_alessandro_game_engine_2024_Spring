@@ -2,30 +2,7 @@
 # This code was inspired by Zelda and informed by Chris Bradfield
 import pygame as pg
 from settings import *
-from os import path
-
 vec =pg.math.Vector2
-
-
-dir = path.dirname(__file__)
-img_folder = path.join(dir, 'images')
-
-
-# sets up file with multiple images...
-class Spritesheet:
-    # utility class for loading and parsing spritesheets
-    def __init__(self, filename):
-        self.spritesheet = pg.image.load(filename).convert()
-
-    def get_image(self, x, y, width, height):
-        # grab an image out of a larger spritesheet
-        image = pg.Surface((width, height))
-        image.blit(self.spritesheet, (0, 0), (x, y, width, height))
-        # image = pg.transform.scale(image, (width, height))
-        image = pg.transform.scale(image, (width * 4, height * 4))
-        return image
-
-
 # create a class for player
 class Player(pg.sprite.Sprite):
     # define __init__(self)
@@ -36,10 +13,7 @@ class Player(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.spritesheet = Spritesheet(path.join(img_folder, 'theBell.png'))
-        self.load_images()
-        # self.image = game.player_img
-        # self.image.fill(GREEN)
+        self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.vs, self.vy = 0, 0
         self.x = x * TILESIZE
@@ -48,7 +22,6 @@ class Player(pg.sprite.Sprite):
         self.speed = 300
         self.hitpoints = 100
     
-
     def get_keys(self):
         self.vx, self.vy = 0, 0
         keys = pg.key.get_pressed()
@@ -63,11 +36,7 @@ class Player(pg.sprite.Sprite):
         if self.vx !=0 and self.vy !=0:
             self.vx *= 0.7071
             self.vy *= 0.7071
-        if keys[pg.K_t]:
-            self.game.change_level("level3.txt")
         
-
-
     def collide_with_walls(self, dir):
         if dir == 'x':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
@@ -87,7 +56,6 @@ class Player(pg.sprite.Sprite):
                     self.y = hits[0].rect.bottom
                 self.vy = 0
                 self.rect.y = self.y
-
     def collide_with_coins(self, dir):
         if dir == 'x':
             hits = pg.sprite.spritecollide(self, self.game.coins, False)
@@ -108,7 +76,6 @@ class Player(pg.sprite.Sprite):
                 self.vy = 0
                 self.rect.y = self.y
                 
-
     def collide_with_group(self, group, kill):
         hits = pg.sprite.spritecollide(self, group, kill)
         if hits:
@@ -126,56 +93,8 @@ class Player(pg.sprite.Sprite):
                 self.hitpoints -= 1
             if self.hitpoints == 0:
                 quit(self)
-
-    class Animated_sprite(Sprite):
-        def __init__(self):
-            Sprite.__init__(self)
-            self.spritesheet = Spritesheet(path.join(img_folder, SPRITESHEET))
-            self.load_images()
-            self.image = self.standing_frames[0]
-            self.rect = self.image.get_rect()
-            self.jumping = False
-            self.walking = False
-            self.current_frame = 0
-            self.last_update = 0
-        
-    def load_images(self):
-        self.standing_frames = [self.spritesheet.get_image(0, 0, 32, 32),
-                                self.spritesheet.get_image(32, 0, 32, 32)]
-        for frame in self.standing_frames:
-            frame.set_colorkey(BLACK)
-        self.walk_frames_r = [self.spritesheet.get_image(678, 860, 120, 201),
-                              self.spritesheet.get_image(692, 1458, 120, 207)]
-        self.walk_frames_l = []
-        for frame in self.walk_frames_r:
-            frame.set_colorkey(BLACK)
-            self.walk_frames_l.append(pg.transform.flip(frame, True, False))
-        self.jump_frame = self.spritesheet.get_image(256, 0, 128, 128)
-        self.jump_frame.set_colorkey(BLACK)
-    def animate(self):
-        now = pg.time.get_ticks()
-        if not self.jumping and not self.walking:
-            if now - self.last_update > 500:
-                self.last_update = now
-                self.current_frame = (self.current_frame + 1) % len(self.standing_frames)
-                bottom = self.rect.bottom
-                self.image = self.standing_frames[self.current_frame]
-                self.rect = self.image.get_rect()
-                self.rect.bottom = bottom
-        if self.jumping:
-            bottom = self.rect.bottom
-            self.image = self.jump_frame
-            self.rect = self.image.get_rect()
-            self.rect.bottom = bottom
-    def update(self):
-        self.animate()
                     
-
                           
-
-
-
-
 # Now we fixed collision problem by finding that it wasn't colliding with the walls vertically. Below is the old version and below this commented bit is the new 
                 # version copied from Github
     # def update(self):
@@ -193,7 +112,6 @@ class Player(pg.sprite.Sprite):
     #     # coin_hits = pg.sprite.spritecollide(self, self.game.coins, True)
     #     # if coin_hits:
     #     #     self.moneybag += 1
-
     def update(self):
         self.get_keys()
         self.x += self.vx * self.game.dt
@@ -217,7 +135,6 @@ class Player(pg.sprite.Sprite):
         
             
        
-
 # we created a class for wall and used the similar function for the class player
 class Wall(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -231,7 +148,6 @@ class Wall(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-
 class Coin(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.coins
@@ -244,7 +160,6 @@ class Coin(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-
 class PowerUp(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.power_ups
@@ -257,8 +172,6 @@ class PowerUp(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-
-# creating the class for the healthpotion
 class HealthPotion(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.healthpotion
@@ -271,9 +184,6 @@ class HealthPotion(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-
-
-# has basic mob movement that we originally coded 
 class Mob(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.mobs
@@ -307,7 +217,7 @@ class Mob(pg.sprite.Sprite):
         # self.rect.x += 1
         self.x += self.vx * self.game.dt
         self.y += self.vy * self.game.dt
-
+        
         if self.rect.x < self.game.player1.rect.x:
             self.vx = 100
         if self.rect.x > self.game.player1.rect.x:
@@ -320,8 +230,6 @@ class Mob(pg.sprite.Sprite):
         self.collide_with_walls('x')
         self.rect.y = self.y
         self.collide_with_walls('y')
-
-
 class Mob2(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.mobs
@@ -333,7 +241,6 @@ class Mob2(pg.sprite.Sprite):
         self.pos = vec(x, y) * TILESIZE
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
-        # we use vectors and acceleration for more fluid player tracking
         self.rect.center = self.pos
         self.rot = 0
         self.chase_distance = 1000
@@ -357,6 +264,7 @@ class Mob2(pg.sprite.Sprite):
             self.rect.center = self.pos
             self.acc = vec(self.speed, 0).rotate(-self.rot)
             self.acc += self.vel * -1
+  
             self.vel += self.acc * self.game.dt
             self.pos += self.vel * self.game.dt + 0.5 * self.acc * self.game.dt ** 2
             self.collide_with_walls('x')
