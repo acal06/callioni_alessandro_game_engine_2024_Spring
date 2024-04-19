@@ -138,6 +138,8 @@ class Game:
         self.all_sprites.update()
         if self.player1.moneybag > 5:
             self.change_level(LEVEL2)
+        if self.player1.hitpoints == 0:
+            self.show_end_screen()
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
@@ -196,6 +198,13 @@ class Game:
     def show_start_screen(self):
         self.screen.fill(BGCOLOR)
         self.draw_text(self.screen, "This is the start screen", 24, WHITE, 11, 10)
+        pg.display.flip()
+        self.wait_for_key()
+
+# defininig the start screen
+    def show_end_screen(self):
+        self.screen.fill(BGCOLOR)
+        self.draw_text(self.screen, "Game Over", 24, WHITE, 11, 10)
         pg.display.flip()
         self.wait_for_key()
 

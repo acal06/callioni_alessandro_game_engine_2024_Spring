@@ -91,8 +91,8 @@ class Player(pg.sprite.Sprite):
                 print(hits[0].__class__.__name__)
                 print("collided with mob")
                 self.hitpoints -= 1
-            if self.hitpoints == 0:
-                quit(self)
+            # if self.hitpoints == 0:
+            #     quit(self)
                     
                           
 # Now we fixed collision problem by finding that it wasn't colliding with the walls vertically. Below is the old version and below this commented bit is the new 
