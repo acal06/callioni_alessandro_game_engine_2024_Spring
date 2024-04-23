@@ -8,6 +8,13 @@ player death
 health bar
 speed power up
 health powerup
+ 
+
+Beta version:
+Fix level2
+
+Release version:
+Phase through walls ability with spacebar - requries collision, timer, and ability changes so the player can go through walls without colliding with them
 '''
 
 import pygame as pg
