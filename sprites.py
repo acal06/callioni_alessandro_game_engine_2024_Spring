@@ -94,7 +94,20 @@ class Player(pg.sprite.Sprite):
             # if self.hitpoints == 0:
             #     quit(self)
                     
-                          
+    def __init__(self, game, x, y, color):
+        # Existing __init__ method code...
+
+        # New properties for phase through walls ability
+        self.phase_through_walls_active = False
+        self.phase_through_walls_start_time = 0
+
+    def activate_phase_through_walls(self):
+        self.phase_through_walls_active = True
+        self.phase_through_walls_start_time = pg.time.get_ticks()
+
+    def deactivate_phase_through_walls(self):
+        self.phase_through_walls_active = False
+        self.phase_through_walls_start_time = 0     
 # Now we fixed collision problem by finding that it wasn't colliding with the walls vertically. Below is the old version and below this commented bit is the new 
                 # version copied from Github
     # def update(self):

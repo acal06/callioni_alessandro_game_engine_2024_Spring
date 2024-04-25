@@ -197,9 +197,18 @@ class Game:
                     self.player1.move(dy=-1)
                 if event.key == pg.K_DOWN:
                     self.player1.move(dy=+1)
+                if event.key == pg.K_SPACE:
+                    self.player1.activate_phase_through_walls()
 # basically all of this above lets us use the keys to move our character around
             
-            
+        if self.player1.phase_through_walls_active:
+            current_time = pg.time.get_ticks()
+            if current_time - self.player1.phase_through_walls_start_time >= PHASE_DURATION:
+                self.player1.deactivate_phase_through_walls()
+
+        PHASE_DURATION = 5000  # Duration of the phase through walls ability in milliseconds (5 seconds)
+
+
 
 # defininig the start screen
     def show_start_screen(self):
