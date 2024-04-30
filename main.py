@@ -79,7 +79,7 @@ class Game:
                 if tile == 'H':
                     HealthPotion(self, col, row)
                 if tile == 'P':
-                    self.player1 = Player(self, col, row)
+                    self.player1 = Player(self, col, row, GREEN)
 
     def load_data(self):
         self.game_folder = path.dirname(__file__)
