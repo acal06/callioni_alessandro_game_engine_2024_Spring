@@ -44,25 +44,25 @@ class Player(pg.sprite.Sprite):
             self.vx *= 0.7071
             self.vy *= 0.7071
         
-    def collide_with_walls(self, dir):
-        if dir == 'x':
-            hits = pg.sprite.spritecollide(self, self.game.walls, False)
-            if hits:
-                if self.vx > 0:
-                    self.x = hits[0].rect.left - self.rect.width
-                if self.vx < 0:
-                    self.x = hits[0].rect.right
-                self.vx = 0
-                self.rect.x = self.x
-        if dir == 'y':
-            hits = pg.sprite.spritecollide(self, self.game.walls, False)
-            if hits:
-                if self.vy > 0:
-                    self.y = hits[0].rect.top - self.rect.height
-                if self.vy < 0:
-                    self.y = hits[0].rect.bottom
-                self.vy = 0
-                self.rect.y = self.y
+    # def collide_with_walls(self, dir):
+    #     if dir == 'x':
+    #         hits = pg.sprite.spritecollide(self, self.game.walls, False)
+    #         if hits:
+    #             if self.vx > 0:
+    #                 self.x = hits[0].rect.left - self.rect.width
+    #             if self.vx < 0:
+    #                 self.x = hits[0].rect.right
+    #             self.vx = 0
+    #             self.rect.x = self.x
+    #     if dir == 'y':
+    #         hits = pg.sprite.spritecollide(self, self.game.walls, False)
+    #         if hits:
+    #             if self.vy > 0:
+    #                 self.y = hits[0].rect.top - self.rect.height
+    #             if self.vy < 0:
+    #                 self.y = hits[0].rect.bottom
+    #             self.vy = 0
+    #             self.rect.y = self.y
                 
     def collide_with_group(self, group, kill):
         hits = pg.sprite.spritecollide(self, group, kill)
@@ -113,7 +113,7 @@ class Player(pg.sprite.Sprite):
         self.collide_with_group(self.game.power_ups, True)
         self.collide_with_group(self.game.mobs, False)
         self.collide_with_group(self.game.healthpotion, True)
-
+    # The following was made with the aid of chat GPT
     def activate_phase_through_walls(self):
         self.phase_through_walls_active = True
         self.phase_through_walls_start_time = pg.time.get_ticks()
@@ -121,6 +121,27 @@ class Player(pg.sprite.Sprite):
     def deactivate_phase_through_walls(self):
         self.phase_through_walls_active = False
         self.phase_through_walls_start_time = 0    
+
+    def collide_with_walls(self, dir):
+        if not self.phase_through_walls_active:
+            if dir == 'x':
+                hits = pg.sprite.spritecollide(self, self.game.walls, False)
+                if hits:
+                    if self.vx > 0:
+                        self.x = hits[0].rect.left - self.rect.width
+                    if self.vx < 0:
+                        self.x = hits[0].rect.right
+                    self.vx = 0
+                    self.rect.x = self.x
+            if dir == 'y':
+                hits = pg.sprite.spritecollide(self, self.game.walls, False)
+                if hits:
+                    if self.vy > 0:
+                        self.y = hits[0].rect.top - self.rect.height
+                    if self.vy < 0:
+                        self.y = hits[0].rect.bottom
+                    self.vy = 0
+                    self.rect.y = self.y
        
 # we created a class for wall and used the similar function for the class player
 class Wall(pg.sprite.Sprite):
@@ -171,52 +192,7 @@ class HealthPotion(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-# class Mob(pg.sprite.Sprite):
-#     def __init__(self, game, x, y):
-#         self.groups = game.all_sprites, game.mobs
-#         pg.sprite.Sprite.__init__(self, self.groups)
-#         self.game = game
-#         self.image = pg.Surface((TILESIZE, TILESIZE))
-#         self.image.fill(RED)
-#         self.rect = self.image.get_rect()
-#         self.x = x
-#         self.y = y
-#         self.vx, self.vy = 100, 100
-#         self.x = x * TILESIZE
-#         self.y = y * TILESIZE
-#         self.rect.x = x * TILESIZE
-#         self.rect.y = y * TILESIZE
-#         self.speed = 100
-#     def collide_with_walls(self, dir):
-#         if dir == 'x':
-#             # print('colliding on the x')
-#             hits = pg.sprite.spritecollide(self, self.game.walls, False)
-#             if hits:
-#                 self.vx *= -1
-#                 self.rect.x = self.x
-#         if dir == 'y':
-#             # print('colliding on the y')
-#             hits = pg.sprite.spritecollide(self, self.game.walls, False)
-#             if hits:
-#                 self.vy *= -1
-#                 self.rect.y = self.y
-#     def update(self):
-#         # self.rect.x += 1
-#         self.x += self.vx * self.game.dt
-#         self.y += self.vy * self.game.dt
-        
-#         if self.rect.x < self.game.player1.rect.x:
-#             self.vx = 100
-#         if self.rect.x > self.game.player1.rect.x:
-#             self.vx = -100    
-#         if self.rect.y < self.game.player1.rect.y:
-#             self.vy = 100
-#         if self.rect.y > self.game.player1.rect.y:
-#             self.vy = -100
-#         self.rect.x = self.x
-#         self.collide_with_walls('x')
-#         self.rect.y = self.y
-#         self.collide_with_walls('y')
+
 class Mob(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.mobs
@@ -224,16 +200,15 @@ class Mob(pg.sprite.Sprite):
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(RED)
-        # self.image = self.game.mob_img
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
         self.vx, self.vy = 100, 100
         self.x = x * TILESIZE
         self.y = y * TILESIZE
-        self.speed = randint(1,3)
-
-        print("created mob at", self.rect.x, self.rect.y)
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+        self.speed = 100
     def collide_with_walls(self, dir):
         if dir == 'x':
             # print('colliding on the x')
@@ -247,25 +222,24 @@ class Mob(pg.sprite.Sprite):
             if hits:
                 self.vy *= -1
                 self.rect.y = self.y
-    def chasing(self):
-        if self.rect.x < self.game.player.rect.x:
-            self.vx = 100
-        if self.rect.x > self.game.player.rect.x:
-            self.vx = -100    
-        if self.rect.y < self.game.player.rect.y:
-            self.vy = 100
-        if self.rect.y > self.game.player.rect.y:
-            self.vy = -100
-    
     def update(self):
-        # # self.rect.x += 1
-        # self.chasing()
+        # self.rect.x += 1
         self.x += self.vx * self.game.dt
         self.y += self.vy * self.game.dt
+        
+        if self.rect.x < self.game.player1.rect.x:
+            self.vx = 100
+        if self.rect.x > self.game.player1.rect.x:
+            self.vx = -100    
+        if self.rect.y < self.game.player1.rect.y:
+            self.vy = 100
+        if self.rect.y > self.game.player1.rect.y:
+            self.vy = -100
         self.rect.x = self.x
         self.collide_with_walls('x')
         self.rect.y = self.y
         self.collide_with_walls('y')
+
 
 class Mob2(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -295,7 +269,7 @@ class Mob2(pg.sprite.Sprite):
         if dir == 'y':
             hits = pg.sprite.spritecollide(self, self.game.walls, True)
     def update(self):
-        # self.sensor()
+        self.sensor()
         if self.chasing:
             self.rot = (self.game.player1.rect.center - self.pos).angle_to(vec(1, 0))
             self.rect.center = self.pos

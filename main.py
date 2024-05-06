@@ -26,7 +26,7 @@ from os import path
 
 LEVEL1 = "level1.txt"
 LEVEL2 = "level2.txt"
-
+PHASE_DURATION = 5000
 
 
 # we create a variable called game
@@ -144,10 +144,10 @@ class Game:
     # it also makes sure that if the player's health reaches zero, then it ends the game
     def update(self):
         self.all_sprites.update()
-        # if self.player1.moneybag > 5:
-        #     self.change_level(LEVEL2)
-        # if self.player1.hitpoints == 0:
-        #     self.show_end_screen()
+        if self.player1.moneybag > 5:
+            self.change_level(LEVEL2)
+        if self.player1.hitpoints == 0:
+            self.show_end_screen()
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
@@ -200,10 +200,12 @@ class Game:
                     self.player1.move(dy=+1)
                 if event.key == pg.K_SPACE:
                     self.player1.activate_phase_through_walls()
+                    print("SPACEBAR")
 # basically all of this above lets us use the keys to move our character around
-            
+        # The following was made with the help and assistance of chat GPT
         if self.player1.phase_through_walls_active:
             current_time = pg.time.get_ticks()
+            PHASE_DURATION = 5000
             if current_time - self.player1.phase_through_walls_start_time >= PHASE_DURATION:
                 self.player1.deactivate_phase_through_walls()
 
