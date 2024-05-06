@@ -26,6 +26,8 @@ class Player(pg.sprite.Sprite):
         self.moneybag = 0
         self.speed = 300
         self.hitpoints = 100
+        self.phase_through_walls_active = False
+        self.phase_through_walls_start_time = 0
     
     def get_keys(self):
         self.vx, self.vy = 0, 0
@@ -59,25 +61,6 @@ class Player(pg.sprite.Sprite):
                     self.y = hits[0].rect.top - self.rect.height
                 if self.vy < 0:
                     self.y = hits[0].rect.bottom
-                self.vy = 0
-                self.rect.y = self.y
-    def collide_with_coins(self, dir):
-        if dir == 'x':
-            hits = pg.sprite.spritecollide(self, self.game.coins, False)
-            if hits:
-                if self.vx > 0:
-                    self.x = hits[0].rect.left - self.width
-                if self.vx < 0:
-                    self.x = hits[0].rect.right
-                self.vx = 0
-                self.rect.x = self.x
-        if dir == 'y':
-            hits = pg.sprite.spritecollide(self, self.game.coins, False)
-            if hits:
-                if self.vy > 0:
-                    self.y = hits[0].rect.bottom - self.height
-                if self.vy < 0:
-                    self.y = hits[0].rect.top
                 self.vy = 0
                 self.rect.y = self.y
                 
@@ -128,21 +111,8 @@ class Player(pg.sprite.Sprite):
         self.collide_with_walls('y')
         self.collide_with_group(self.game.coins, True)
         self.collide_with_group(self.game.power_ups, True)
-        if self.collide_with_group(self.game.power_ups, True):
-            self.speed += 100
         self.collide_with_group(self.game.mobs, False)
-        if self.collide_with_group(self.game.mobs, False):
-            self.hitpoints =-1
         self.collide_with_group(self.game.healthpotion, True)
-        if self.collide_with_group(self.game.healthpotion, True):
-            self.hitpoints += 50
-        
-    def __init__(self, game, x, y, color):
-        # Existing __init__ method code...
-
-        # New properties for phase through walls ability
-        self.phase_through_walls_active = False
-        self.phase_through_walls_start_time = 0
 
     def activate_phase_through_walls(self):
         self.phase_through_walls_active = True
@@ -325,7 +295,7 @@ class Mob2(pg.sprite.Sprite):
         if dir == 'y':
             hits = pg.sprite.spritecollide(self, self.game.walls, True)
     def update(self):
-        self.sensor()
+        # self.sensor()
         if self.chasing:
             self.rot = (self.game.player1.rect.center - self.pos).angle_to(vec(1, 0))
             self.rect.center = self.pos
@@ -337,3 +307,7 @@ class Mob2(pg.sprite.Sprite):
             self.collide_with_walls('x')
             self.collide_with_walls('y')
             # self.hit_rect.centerx = self.pos.x        
+
+
+
+
