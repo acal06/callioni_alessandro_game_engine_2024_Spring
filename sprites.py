@@ -6,6 +6,8 @@ from settings import *
 from random import choice
 from random import randint
 from os import path
+PHASE_DURATION = 5000
+
 
 vec =pg.math.Vector2
 # create a class for player
@@ -28,6 +30,12 @@ class Player(pg.sprite.Sprite):
         self.hitpoints = 100
         self.phase_through_walls_active = False
         self.phase_through_walls_start_time = 0
+        self.color_timer = 0  # Timer to control color change
+        self.colors = [RED, GREEN, BLUE, YELLOW, PURPLE]  # List of colors
+
+    def change_color(self):
+        # Change color to a random color from the list
+        self.image.fill(choice(self.colors))
     
     def get_keys(self):
         self.vx, self.vy = 0, 0
@@ -43,26 +51,10 @@ class Player(pg.sprite.Sprite):
         if self.vx !=0 and self.vy !=0:
             self.vx *= 0.7071
             self.vy *= 0.7071
+        # if keys[pg.K_o]:
+        #     self.player1.change_color()
         
-    # def collide_with_walls(self, dir):
-    #     if dir == 'x':
-    #         hits = pg.sprite.spritecollide(self, self.game.walls, False)
-    #         if hits:
-    #             if self.vx > 0:
-    #                 self.x = hits[0].rect.left - self.rect.width
-    #             if self.vx < 0:
-    #                 self.x = hits[0].rect.right
-    #             self.vx = 0
-    #             self.rect.x = self.x
-    #     if dir == 'y':
-    #         hits = pg.sprite.spritecollide(self, self.game.walls, False)
-    #         if hits:
-    #             if self.vy > 0:
-    #                 self.y = hits[0].rect.top - self.rect.height
-    #             if self.vy < 0:
-    #                 self.y = hits[0].rect.bottom
-    #             self.vy = 0
-    #             self.rect.y = self.y
+    
                 
     def collide_with_group(self, group, kill):
         hits = pg.sprite.spritecollide(self, group, kill)
@@ -82,23 +74,7 @@ class Player(pg.sprite.Sprite):
             # if self.hitpoints == 0:
             #     quit(self)
                          
-# Now we fixed collision problem by finding that it wasn't colliding with the walls vertically. Below is the old version and below this commented bit is the new 
-                # version copied from Github
-    # def update(self):
-    #     self.get_keys()
-    #     self.x += self.vx *self.game.dt
-    #     self.y += self.vy *self.game.dt
-    #     self.rect.x = self.x
-    #     # add collision later
-    #     self.collide_with_walls('x')
-    #     self.rect.y = self.y 
-    #     self.collide_with_group(self.game.coins, True)
-    #     # add collision later
-    #     # if self.collide_with_coins():
-    #     #     self.moneybag += 1
-    #     # coin_hits = pg.sprite.spritecollide(self, self.game.coins, True)
-    #     # if coin_hits:
-    #     #     self.moneybag += 1
+
     def update(self):
         self.get_keys()
         self.x += self.vx * self.game.dt
@@ -113,6 +89,16 @@ class Player(pg.sprite.Sprite):
         self.collide_with_group(self.game.power_ups, True)
         self.collide_with_group(self.game.mobs, False)
         self.collide_with_group(self.game.healthpotion, True)
+
+        if self.phase_through_walls_active:
+            current_time = pg.time.get_ticks()
+            if current_time - self.phase_through_walls_start_time >= PHASE_DURATION:
+                self.deactivate_phase_through_walls()
+        # Control color change timing
+        if pg.time.get_ticks() - self.color_timer > 300:  # Change color every 0.3 seconds
+            self.change_color()
+            self.color_timer = pg.time.get_ticks()  # Reset timer
+
     # The following was made with the aid of chat GPT
     def activate_phase_through_walls(self):
         self.phase_through_walls_active = True
@@ -142,7 +128,7 @@ class Player(pg.sprite.Sprite):
                         self.y = hits[0].rect.bottom
                     self.vy = 0
                     self.rect.y = self.y
-       
+
 # we created a class for wall and used the similar function for the class player
 class Wall(pg.sprite.Sprite):
     def __init__(self, game, x, y):
