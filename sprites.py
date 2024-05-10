@@ -119,6 +119,13 @@ class Player(pg.sprite.Sprite):
                         self.x = hits[0].rect.right
                     self.vx = 0
                     self.rect.x = self.x
+                # for wall in hits:
+                #     for wall in hits:
+                #         wall.change_color()  # Call the change_color method of the wall
+                #         wall.color_timer = pg.time.get_ticks()  # Start color change timer
+                #         self.vx = 0
+                #         self.x = wall.rect.x if self.vx > 0 else wall.rect.right
+                #         self.rect.x = self.x
             if dir == 'y':
                 hits = pg.sprite.spritecollide(self, self.game.walls, False)
                 if hits:
@@ -128,6 +135,12 @@ class Player(pg.sprite.Sprite):
                         self.y = hits[0].rect.bottom
                     self.vy = 0
                     self.rect.y = self.y
+                # for wall in hits:
+                #     wall.change_color()  # Call the change_color method of the wall
+                #     wall.color_timer = pg.time.get_ticks()  # Start color change timer
+                #     self.vy = 0
+                #     self.y = wall.rect.y if self.vy > 0 else wall.rect.bottom
+                #     self.rect.y = self.y
 
 # we created a class for wall and used the similar function for the class player
 class Wall(pg.sprite.Sprite):
@@ -142,6 +155,21 @@ class Wall(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+    #     # self.color_timer = 0  # Timer to control color change
+    #     # self.colors = [PINK, ORANGE, CYAN, MAGENTA]  # List of colors for wall change
+    #     # self.original_color = BLUE
+
+    # def change_color(self):
+    #     # Change color to a random color from the list
+    #     self.image.fill(choice(self.colors))
+
+    # def update(self):
+    #     # Control color change timing
+    #     if pg.time.get_ticks() - self.color_timer > 2000:  # Change color for 2 seconds
+    #         self.image.fill(self.original_color)  # Revert color back to original
+    #         self.color_timer = 0
+
+
 class Coin(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.coins

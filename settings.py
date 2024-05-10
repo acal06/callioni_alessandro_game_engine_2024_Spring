@@ -19,6 +19,8 @@ ORANGE = (255,140,0)
 GREEN = (0,255,0)
 PURPLE = (255,0,255)
 PINK = (255,0,155)
+CYAN = (0, 255, 255)
+MAGENTA = (255, 0, 255)
 
 # Player settings
 PLAYER_SPEED = 300
