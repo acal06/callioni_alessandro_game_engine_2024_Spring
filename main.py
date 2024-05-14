@@ -205,10 +205,13 @@ class Game:
 # basically all of this above lets us use the keys to move our character around
         # The following was made with the help and assistance of chat GPT
         if self.player1.phase_through_walls_active:
+            # the following basically makes it that the game now has a clock imported from pygame
             current_time = pg.time.get_ticks()
             PHASE_DURATION = 5000
             if current_time - self.player1.phase_through_walls_start_time >= PHASE_DURATION:
                 self.player1.deactivate_phase_through_walls()
+                # the above means that if the current time is more than the phase_duration (which is five seconds) then 
+                # we disable the phase ability
 
         PHASE_DURATION = 5000  # Duration of the phase through walls ability in milliseconds (5 seconds)
 

@@ -94,10 +94,10 @@ class Player(pg.sprite.Sprite):
             current_time = pg.time.get_ticks()
             if current_time - self.phase_through_walls_start_time >= PHASE_DURATION:
                 self.deactivate_phase_through_walls()
-        # Control color change timing
-        if pg.time.get_ticks() - self.color_timer > 300:  # Change color every 0.3 seconds
-            self.change_color()
-            self.color_timer = pg.time.get_ticks()  # Reset timer
+        # # Control color change timing
+        # if pg.time.get_ticks() - self.color_timer > 300:  # Change color every 0.3 seconds
+        #     self.change_color()
+        #     self.color_timer = pg.time.get_ticks()  # Reset timer
 
     # The following was made with the aid of chat GPT
     def activate_phase_through_walls(self):
