@@ -224,7 +224,7 @@ class Game:
         pg.display.flip()
         self.wait_for_key()
 
-# defininig the start screen
+# defininig the end screen
     def show_end_screen(self):
         self.screen.fill(BGCOLOR)
         self.draw_text(self.screen, "Game Over", 24, WHITE, 11, 10)
